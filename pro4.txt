@@ -1,0 +1,99 @@
+void Viewshed::calr(AUXILIARY& T, AUXILIARY& R,
+	double theta, int cellsize, int i, int j, double RK, int r, int col) {
+	R.f_row = (double)r;
+	R.f_col = j + RK * (r - i);
+
+	if (R.f_col > col - 1 || R.f_col < 0) 
+		return;
+
+	R.m_l = v_dem.GetAltitude(r, floor(R.f_col));
+	R.m_r = v_dem.GetAltitude(r, ceil(R.f_col));
+	if (R.m_l < R.m_r) {
+		R.m_altd = (R.m_r - R.m_l) * (R.f_col - floor(R.f_col)) + R.m_l;
+	}
+	else {
+		R.m_altd = (R.m_l - R.m_r) * (ceil(R.f_col) - R.f_col) + R.m_r;
+	}
+
+	ISViewshed(T, R, theta, cellsize, i, j, r, 1);
+}
+
+void Viewshed::calc(AUXILIARY& T, AUXILIARY& R, double theta, int cellsize, int i, int j, double RK, int row, int c) {
+	R.f_col = (double)c;
+	R.f_row = (c - j) / RK + i;
+
+	if (R.f_row > row - 1 || R.f_row < 0)
+		return;
+
+	R.m_u = v_dem.GetAltitude(floor(R.f_row), c);
+	R.m_d = v_dem.GetAltitude(ceil(R.f_row), c);
+
+	if (R.m_u > R.m_d) {
+		R.m_altd = (R.m_u - R.m_d) * (ceil(R.f_row) - R.f_row) + R.m_d;
+	}
+	else {
+		R.m_altd = (R.m_d - R.m_u) * (R.f_row - floor(R.f_row)) + R.m_u;
+	}
+
+	ISViewshed(T, R, theta, cellsize, i, j, c, 2);     //k == 2表示列交点，c在这里作为列的参数
+}
+
+int Viewshed::cal(AUXILIARY& T, AUXILIARY& R, double theta, int cellsize,
+	int i, int j, double RK, double r, double c, int row, int col)
+{
+	R.f_row = r;
+	R.f_col = c;  
+
+	if (R.f_col > col - 1 || R.f_col < 0) 
+		return 0;
+	if (R.f_row > row - 1 || R.f_row < 0)
+		return 0;
+
+	if (isInteger(c)) {
+		R.m_u = v_dem.GetAltitude(floor(R.f_row), c);
+		R.m_d = v_dem.GetAltitude(ceil(R.f_row), c);
+
+		if (R.m_u > R.m_d) {
+			R.m_altd = (R.m_u - R.m_d) * (ceil(R.f_row) - R.f_row) + R.m_d;
+		}
+		else {
+			R.m_altd = (R.m_d - R.m_u) * (R.f_row - floor(R.f_row)) + R.m_u;
+		}
+	}
+	else if (isInteger(r) && !isInteger(c)) {
+		R.m_l = v_dem.GetAltitude(r, floor(R.f_col));
+		R.m_r = v_dem.GetAltitude(r, ceil(R.f_col));
+
+		if (R.m_l < R.m_r) {
+			R.m_altd = (R.m_r - R.m_l) * (R.f_col - floor(R.f_col)) + R.m_l;
+		}
+		else {
+			R.m_altd = (R.m_l - R.m_r) * (ceil(R.f_col) - R.f_col) + R.m_r;
+		}
+	}
+	else {
+		int c1 = floor(c), c2 = ceil(c);
+		int r1 = floor(r), r2 = ceil(r);		//r1 c1, r2 c1
+		double dem1 = v_dem.GetAltitude(r1, c1), dem2 = v_dem.GetAltitude(r2, c1);
+		double dem3 = v_dem.GetAltitude(r1, c2), dem4 = v_dem.GetAltitude(r2, c2);
+		double demt1, demt2;
+		
+		if (dem1 < dem2)
+			demt1 = dem1 + (dem2 - dem1) * (r - r1) / (r2 - r1);
+		else
+			demt1 = dem1 - (dem1 - dem2) * (r - r1) / (r2 - r1);
+	
+		if (dem3 < dem4)
+			demt2 = dem3 + (dem4 - dem3) * (r - r1) / (r2 - r1);
+		else
+			demt2 = dem3 - (dem3 - dem4) * (r - r1) / (r2 - r1);
+	
+		if (demt1 < demt2)
+			R.m_altd = demt1 + (demt2 - demt1) * (c - c1) / (c2 - c1);
+		else
+			R.m_altd = demt1 - (demt1 - demt2) * (c - c1) / (c2 - c1);
+	}
+
+	ISViewshed(T, R, theta, cellsize, i, j, R.f_row, 1);
+	return 1;
+}

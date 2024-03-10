@@ -1,0 +1,25 @@
+
+class Input {
+private:
+	int m_cellsize;	
+	int m_nrows;	
+	int m_ncols;
+	int m_NODATA_VALUE;	
+	double m_xllcorner, m_yllcorner;
+	vector<vector<int>> altitude;
+	string s[6];    
+	string s_idirection;
+public:
+	Input();
+	~Input();
+	void Intial(const string&);
+	int GetNcols();
+	int GetNrows();
+	int GetCellsize();
+	double GetXCorner();
+	double GetYCorner();
+	int GetNODATA_VALUE();
+	int GetAltitude(const int&, const int&);
+	string GetS(const int&);
+	string GetDirection();
+};

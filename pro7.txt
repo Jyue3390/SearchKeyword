@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 100
+
+typedef struct {
+    int array[MAX_SIZE];
+    int size;
+} Array;
+
+
+Array* createArray() {
+    Array* arr = (Array*)malloc(sizeof(Array));
+    arr->size = 0;
+    return arr;
+}
+
+
+void insertElement(Array* arr, int element) {
+    if (arr->size < MAX_SIZE) {
+        arr->array[arr->size] = element;
+        arr->size++;
+    } else {
+        printf("Error: Array is full\n");
+    }
+}
+
+
+void printArray(Array* arr) {
+    printf("Array elements: ");
+    for (int i = 0; i < arr->size; ++i) {
+        printf("%d ", arr->array[i]);
+    }
+    printf("\n");
+}

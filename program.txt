@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int partition(int *nums, int l, int r) {
+    int pivot = nums[r];
+    int i = l - 1;
+    for (int j = l; j < r; j++) {
+        if (nums[j] <= pivot) {
+            i++;
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+        }
+    }
+    int temp = nums[i + 1];
+    nums[i + 1] = nums[r];
+    nums[r] = temp;
+    return i + 1;
+}
+
+int randomPartition(int *nums, int l, int r) {
+    int i = l + rand() % (r - l + 1);
+    int temp = nums[i];
+    nums[i] = nums[r];
+    nums[r] = temp;
+    return partition(nums, l, r);
+}
+
+int quickSelected(int *nums, int l, int r, int k) {
+    int index = randomPartition(nums, l, r);
+    if (k == index) {
+        return nums[k];
+    }
+    if (k < index) {
+        return quickSelected(nums, l, index - 1, k);
+    }
+    return quickSelected(nums, index + 1, r, k);
+}
+
+int minMoves2(int *nums, int size) {
+    srand(time(NULL));
+    int x = quickSelected(nums, 0, size - 1, size / 2);
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += abs(nums[i] - x);
+    }
+    return sum;
+}
+
+int main() {
+    // Ê¾ÀýÓÃ·¨
+    int nums[] = {1, 2, 3, 4, 5};
+    int size = sizeof(nums) / sizeof(nums[0]);
+    int result = minMoves2(nums, size);
+    printf("Result: %d\n", result);
+    return 0;
+}

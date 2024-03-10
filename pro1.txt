@@ -1,0 +1,26 @@
+int Quick_Paitition(int r[], int i, int j)
+{
+	int temp = r[i];
+	while (i < j)
+	{
+		while (i < j && temp <= r[j])
+			j--;
+		if (i < j)
+			r[i++] = r[j];
+		while (i < j && temp >= r[i])
+			i++;
+		if (i < j)
+			r[j--] = r[i];
+	}
+	r[i] = temp;
+	return i;
+}
+void QuickSort(int r[], int i, int j)
+{
+	if (i < j)
+	{
+		int pivot = Quick_Paitition(r, i, j);
+		QuickSort(r, i, pivot - 1);
+		QuickSort(r, pivot + 1, j);
+	}
+}

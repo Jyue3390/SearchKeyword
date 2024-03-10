@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="SearchKeyword"/>
+  <qresource prefix="source">
+    <file>_20230905205416.png</file>
+    <file>_20230905205415.png</file>
+    <file>_20230905205315.jpg</file>
+    <file>_20230905205412_1.jpg</file>
+    <file>_20230905205415.jpg</file>
+    <file>_20230905205416.jpg</file>
+  </qresource>
+  <qresource prefix="新前缀"/>
+  <qresource prefix="新前缀"/>
+</RCC>

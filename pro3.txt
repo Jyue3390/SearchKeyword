@@ -1,0 +1,35 @@
+
+void Viewshed::Intial(DEM& dem) {
+	v_dem = dem;
+	int nrows = v_dem.GetNrows();
+	int ncols = v_dem.GetNcols();
+
+	if (nrows > 0 && ncols > 0) {
+		view.resize(nrows, vector<int>(ncols, 1)); 
+		counter.resize(nrows, vector<double>(ncols, 0));  
+	}
+}
+
+int Viewshed::GetViewshed(int& i, int& j) {
+	return view[i][j];
+}
+
+double Viewshed::GetCounter(int& i, int& j) {
+	return counter[i][j];
+}
+
+void Viewshed::ISViewshed(AUXILIARY& T, AUXILIARY& R, double theta, int cellsize, int i, int j, int r, int k) {
+	double distance;
+	if (k == 1)
+		distance = cellsize * sqrt((r - i) * (r - i) + (R.f_col - j) * (R.f_col - j)); 
+	else
+		distance = cellsize * sqrt((r - j) * (r - j) + (R.f_row - i) * (R.f_row - i));
+
+	double slopeTan = (R.m_altd - T.m_altd) / distance;
+	double sunTan = tan(theta * PI / 180);
+
+	if (slopeTan > sunTan) {
+		view[i][j] = 0;
+	}
+	return;
+}

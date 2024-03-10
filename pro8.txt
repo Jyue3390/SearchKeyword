@@ -1,0 +1,83 @@
+#include <stdio.h>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+float divide(float a, float b) {
+    if (b != 0)
+        return a / b;
+    else {
+        printf("Error: Division by zero\n");
+        return 0;
+    }
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+float divide(float a, float b) {
+    if (b != 0)
+        return a / b;
+    else
+        return 0;
+}
+
+int square(int a) {
+    return a * a;
+}
+
+float squareRoot(float a) {
+    if (a >= 0)
+        return sqrt(a);
+    else
+        return 0;
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+float divide(float a, float b) {
+    if (b != 0)
+        return a / b;
+    else
+        return 0;
+}
+
+int square(int a) {
+    return a * a;
+}
+
+float squareRoot(float a) {
+    if (a >= 0)
+        return sqrt(a);
+    else
+        return 0;
+}
+
